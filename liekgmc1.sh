@@ -7,11 +7,11 @@ G='\033[1;38;5;82m'      # Emerald Green
 R='\033[1;38;5;196m'     # Crimson Red
 Y='\033[1;38;5;220m'     # Gold/Yellow
 W='\033[1;38;5;255m'     # Pure White
-B='\033[0;38;5;236m'     # Dark Gray
+B='\033[0;38;5;236m'     # Dark Gray (The "Black" background)
 NC='\033[0m'             # Reset
 
 while true; do
-    # --- DYNAMIC DATA GATHERING ---
+    # --- DYNAMIC DATA ---
     HNAME=$(hostname)
     UPTIME=$(uptime -p | sed 's/up //')
     DISK=$(df -h / | awk 'NR==2 {print $5}')
@@ -26,16 +26,16 @@ while true; do
     fi
 
     clear
-    # TOP STATUS BAR
-    echo -e " ${W}─${NC} ${C}${NC}${B}  $HNAME ${NC}${C}${NC}  ${P}${NC}${B}  $UPTIME ${NC}${P}${NC}  ${G}${NC}${B}  $DISK ${NC}${G}${NC}  ${W}${NC}${B}  $CPU% RAM $RAM%${NC}${W}${NC}"
+    # TOP STATUS BAR (White Caps + Black Background Text)
+    echo -e " ${W}─${NC} ${W}${NC}${B}  $HNAME ${NC}${W}${NC}  ${W}${NC}${B}  $UPTIME ${NC}${W}${NC}  ${W}${NC}${B}  $DISK ${NC}${W}${NC}  ${W}${NC}${B}  $CPU% RAM $RAM%${NC}${W}${NC}"
 
-    # MAIN LOGO: LIEKGMC (Gradient Style)
+    # MAIN LOGO: LIEKGMC
     echo -e "${C}██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ "
     echo -e "${P}██║     ██║██╔════╝██║ ██╔╝██╔════╝ ████╗ ████║██╔════╝ "
     echo -e "${P}██║     ██║█████╗  █████╔╝ ██║  ███╗██╔████╔██║██║      "
     echo -e "${Y}██║     ██║██╔══╝  ██╔═██╗ ██║   ██║██║╚██╔╝██║██║      "
     echo -e "${C}███████╗██║███████╗██║  ██╗╚██████╔╝██║ ╚═╝ ██║╚██████╗ "
-    echo -e "${C}╚══════╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ "
+    echo -e " ${C}╚══════╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ "
     
     echo -e "                  ${W}NOBITA EDITION — OBSIDIAN NEXT GEN${NC}"
     echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}\n"
@@ -53,7 +53,7 @@ while true; do
 
     # MAINTENANCE & TOOLS
     echo -e " ${P} MAINTENANCE & TOOLS${NC}"
-    echo -e "   ${B}├─${NC} [4] Toolbox           ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
+    echo -e "   ${B}├─${NC} [4] Toolbox       ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
     echo -e "   ${B}└─${NC} [9] Extras\n"
 
     echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}"
@@ -62,9 +62,6 @@ while true; do
 
     case $opt in
         0) echo -e "\n${R}Shutting down...${NC}"; exit 0 ;;
-        1) echo -e "\n${G}Selected: VPS Deployment${NC}"; sleep 1 ;;
-        2) echo -e "\n${G}Selected: Panel Config${NC}"; sleep 1 ;;
-        4) echo -e "\n${P}Launching Toolbox...${NC}"; sleep 1 ;;
-        *) echo -e "\n${W}Running module $opt...${NC}"; sleep 1 ;;
+        *) echo -e "\n${G}Selected Option $opt...${NC}"; sleep 1 ;;
     esac
 done
