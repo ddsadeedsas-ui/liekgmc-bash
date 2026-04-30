@@ -1,67 +1,71 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# --- COLOR DEFINITIONS ---
-C='\033[1;38;5;51m'      # Neon Cyan
-P='\033[1;38;5;135m'     # Deep Purple
-G='\033[1;38;5;82m'      # Emerald Green
-R='\033[1;38;5;196m'     # Crimson Red
-Y='\033[1;38;5;220m'     # Gold/Yellow
-W='\033[1;38;5;255m'     # Pure White
-B='\033[0;38;5;236m'     # Dark Gray
-NC='\033[0m'             # Reset
-
-while true; do
-    # --- DYNAMIC DATA GATHERING ---
-    HNAME=$(hostname)
-    UPTIME=$(uptime -p | sed 's/up //')
-    DISK=$(df -h / | awk 'NR==2 {print $5}')
-    MEM_A=$(grep MemAvailable /proc/meminfo | awk '{print $2}'); MEM_T=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-    RAM=$(( 100 - (MEM_A * 100 / MEM_T) ))
-    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | cut -d. -f1)
-
-    if ping -q -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then 
-        NET_STAT="${G}● CONNECTED${NC}"
-    else 
-        NET_STAT="${R}● DISCONNECTED${NC}"
-    fi
-
+# Function to display the banner
+display_banner() {
     clear
-    # TOP STATUS BAR (Fixed Powerline Caps)
-    echo -e " ${W}─${NC} ${C}${NC}${B}  $HNAME ${NC}${C}${NC}  ${P}${NC}${B}  $UPTIME ${NC}${P}${NC}  ${G}${NC}${B}  $DISK ${NC}${G}${NC}  ${W}${NC}${B}  $CPU% RAM $RAM%${NC}${W}${NC}"
+    echo -e "\e[36m" # Cyan
+    cat << "EOF"
+      _____  _        _       _
+     | ____|| |      | |     | |
+     | |__  | |      | |     | |
+     | __|  | |      | |     | |
+     | |___ | |____  | |____ | |____
+     |_____||______| |______| |______|
+EOF
+    echo -e "\e[33m NOBITA EDITION - OBSIDIAN NEXT GEN \e[0m" # Yellow
+    echo ""
+}
 
-    # MAIN LOGO: LIEKGMC (Gradient Style)
-    echo -e "${C}██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ "
-    echo -e "${P}██║     ██║██╔════╝██║ ██╔╝██╔════╝ ████╗ ████║██╔════╝ "
-    echo -e "${P}██║     ██║█████╗  █████╔╝ ██║  ███╗██╔████╔██║██║      "
-    echo -e "${Y}██║     ██║██╔══╝  ██╔═██╗ ██║   ██║██║╚██╔╝██║██║      "
-    echo -e "${C}███████╗██║███████╗██║  ██╗╚██████╔╝██║ ╚═╝ ██║╚██████╗ "
-    echo -e " ${C}╚══════╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ "
-    
-    echo -e "                  ${W}NOBITA EDITION — OBSIDIAN NEXT GEN${NC}"
-    echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}\n"
+# Function to display system status
+display_system_status() {
+    CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
+    RAM_USAGE=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
+    NETWORK_STATUS="CONNECTED" # Placeholder for now
 
-    # SYSTEM STATUS
-    echo -e " ${W}◉ SYSTEM STATUS${NC}"
-    echo -e "   CPU Usage:   ${C}$CPU%${NC}     RAM Usage:   ${P}$RAM%${NC}     Network: $NET_STAT\n"
+    echo -e "\e[96mSYSTEM STATUS\e[0m" # Light Cyan
+    echo "  CPU Usage: \e[92m${CPU_USAGE}%\e[0m" # Green
+    echo "  RAM Usage: \e[93m${RAM_USAGE}%\e[0m" # Yellow
+    echo "  Network: \e[92m${NETWORK_STATUS}\e[0m" # Green
+    echo ""
+}
 
-    # DEPLOYMENT & SERVICES (Properly Aligned Branches)
-    echo -e " ${C} DEPLOYMENT & SERVICES${NC}"
-    echo -e "   ${B}├─${NC} [1] VPS           ${B}├─${NC} [5] Themes"
-    echo -e "   ${B}├─${NC} [2] Panel         ${B}├─${NC} [6] System"
-    echo -e "   ${B}├─${NC} [3] Wings         ${B}└─${NC} [7] Container"
-    echo -e "   ${B}└─${NC} [8] ${G}New Module${NC}\n"
+# Function to display the main menu
+display_main_menu() {
+    echo -e "\e[96mDEPLOYMENT & SERVICES\e[0m" # Light Cyan
+    echo "  [1] VPS"
+    echo "  [2] Panel"
+    echo "  [3] Wings"
+    echo "  [5] Themes"
+    echo "  [6] System"
+    echo "  [7] Container"
+    echo "  [8] New Module"
+    echo ""
+    echo -e "\e[96mMAINTENANCE & TOOLS\e[0m" # Light Cyan
+    echo "  [4] Toolbox"
+    echo "  [9] Extras"
+    echo "  [0] SHUTDOWN SYSTEM"
+    echo ""
+}
 
-    # MAINTENANCE & TOOLS (Shutdown Button Fixed)
-    echo -e " ${P} MAINTENANCE & TOOLS${NC}"
-    echo -e "   ${B}├─${NC} [4] Toolbox              ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
-    echo -e "   ${B}└─${NC} [9] Extras\n"
+# Main loop
+while true; do
+    display_banner
+    display_system_status
+    display_main_menu
 
-    echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}"
-    echo -ne " ${C}➜ Enter Option (0-9): ${NC}"
-    read -r opt
+    read -p "Enter Option (0-9): " choice
 
-    case $opt in
-        0) echo -e "\n${R}Shutting down system...${NC}"; exit 0 ;;
-        *) echo -e "\n${G}Selected Option $opt...${NC}"; sleep 1 ;;
+    case $choice in
+        1) echo "Executing VPS option..."; sleep 2 ;;
+        2) echo "Executing Panel option..."; sleep 2 ;;
+        3) echo "Executing Wings option..."; sleep 2 ;;
+        4) echo "Executing Toolbox option..."; sleep 2 ;;
+        5) echo "Executing Themes option..."; sleep 2 ;;
+        6) echo "Executing System option..."; sleep 2 ;;
+        7) echo "Executing Container option..."; sleep 2 ;;
+        8) echo "Executing New Module option..."; sleep 2 ;;
+        9) echo "Executing Extras option..."; sleep 2 ;;
+        0) echo "Shutting down..."; exit 0 ;;
+        *) echo "Invalid option. Please enter a number between 0 and 9."; sleep 2 ;;
     esac
 done
