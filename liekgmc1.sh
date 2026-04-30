@@ -7,15 +7,29 @@ G='\033[1;38;5;82m'      # Emerald Green
 R='\033[1;38;5;196m'     # Crimson Red
 Y='\033[1;38;5;220m'     # Gold/Yellow
 W='\033[1;38;5;255m'     # Pure White
-B='\033[0;38;5;236m'     # Dark Gray (Background-ish)
+B='\033[0;38;5;236m'     # Dark Gray
 NC='\033[0m'             # Reset
 
 while true; do
-    clear
-    # TOP STATUS BAR (Powerline Style)
-    echo -e " ${C}${NC}${B}  65c2dcb5d72a ${NC}${C}${NC}  ${P}${NC}${B}  3 days, 1 hour, 54 minutes ${NC}${P}${NC}  ${G}${NC}${B}  35% ${NC}${G}${NC}  ${W}${NC}${B}  3% RAM 7%${NC}${W}${NC}"
+    # --- DYNAMIC DATA GATHERING ---
+    HNAME=$(hostname)
+    UPTIME=$(uptime -p | sed 's/up //')
+    DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}')
+    
+    # RAM Calculation
+    MEM_TOTAL=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    MEM_AVAIL=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+    RAM_USAGE=$(( 100 - (MEM_AVAIL * 100 / MEM_TOTAL) ))
+    
+    # CPU Calculation (Average)
+    CPU_LOAD=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
+    CPU_USAGE=$(printf "%.0f" "$CPU_LOAD")
 
-    # MAIN LOGO (GODING HUB - Gradient Styled)
+    clear
+    # TOP STATUS BAR (Dynamic)
+    echo -e " ${C}${NC}${B}  $HNAME ${NC}${C}${NC}  ${P}${NC}${B}  $UPTIME ${NC}${P}${NC}  ${G}${NC}${B}  $DISK_USAGE ${NC}${G}${NC}  ${W}${NC}${B}  $CPU_USAGE% RAM $RAM_USAGE%${NC}${W}${NC}"
+
+    # MAIN LOGO (Gradient Effect)
     echo -e "${C}██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ "
     echo -e "${P}██║     ██║██╔════╝██║ ██╔╝██╔════╝ ████╗ ████║██╔════╝ "
     echo -e "${P}██║     ██║█████╗  █████╔╝ ██║  ███╗██╔████╔██║██║      "
@@ -28,7 +42,7 @@ while true; do
 
     # SYSTEM STATUS
     echo -e " ${W}◉ SYSTEM STATUS${NC}"
-    echo -e "   CPU Usage:   ${C}3%${NC}     RAM Usage:   ${P}7%${NC}     Network: ${G}● CONNECTED${NC}\n"
+    echo -e "   CPU Usage:   ${C}$CPU_USAGE%${NC}     RAM Usage:   ${P}$RAM_USAGE%${NC}     Network: ${G}● CONNECTED${NC}\n"
 
     # DEPLOYMENT & SERVICES
     echo -e " ${C} DEPLOYMENT & SERVICES${NC}"
@@ -47,16 +61,16 @@ while true; do
     read -r opt
 
     case $opt in
-        1) echo -e "\n${G}Selected: VPS Deployment${NC}"; sleep 1 ;;
-        2) echo -e "\n${G}Selected: Panel Management${NC}"; sleep 1 ;;
-        3) echo -e "\n${G}Selected: Wings Config${NC}"; sleep 1 ;;
-        4) echo -e "\n${P}Selected: Toolbox${NC}"; sleep 1 ;;
-        5) echo -e "\n${C}Selected: Themes${NC}"; sleep 1 ;;
-        6) echo -e "\n${W}Selected: System Health${NC}"; sleep 1 ;;
-        7) echo -e "\n${G}Selected: Container Management${NC}"; sleep 1 ;;
-        8) echo -e "\n${G}Selected: New Module${NC}"; sleep 1 ;;
-        9) echo -e "\n${P}Selected: Extras${NC}"; sleep 1 ;;
-        0) echo -e "\n${R}Terminating Session...${NC}"; exit 0 ;;
+        1) echo -e "\n${G}Opening VPS Tools...${NC}"; sleep 2 ;;
+        2) echo -e "\n${G}Accessing Panel...${NC}"; sleep 2 ;;
+        3) echo -e "\n${G}Checking Wings...${NC}"; sleep 2 ;;
+        4) echo -e "\n${P}Starting Toolbox...${NC}"; sleep 2 ;;
+        5) echo -e "\n${C}Loading Themes...${NC}"; sleep 2 ;;
+        6) echo -e "\n${W}System Information:${NC}"; uname -a; sleep 3 ;;
+        7) echo -e "\n${G}Docker Status:${NC}"; docker ps 2>/dev/null || echo "Docker not found"; sleep 2 ;;
+        8) echo -e "\n${G}Module Loaded.${NC}"; sleep 2 ;;
+        9) echo -e "\n${P}Extras Menu...${NC}"; sleep 2 ;;
+        0) echo -e "\n${R}Shutting down... Goodbye!${NC}"; exit 0 ;;
         *) echo -e "\n${R}Invalid Option!${NC}"; sleep 1 ;;
     esac
 done
