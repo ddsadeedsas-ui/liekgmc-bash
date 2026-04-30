@@ -11,15 +11,14 @@ B='\033[0;38;5;236m'     # Dark Gray
 NC='\033[0m'             # Reset
 
 while true; do
-    # --- DATA GATHERING ---
+    # --- DYNAMIC DATA GATHERING ---
     HNAME=$(hostname)
     UPTIME=$(uptime -p | sed 's/up //')
     DISK=$(df -h / | awk 'NR==2 {print $5}')
-    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | cut -d. -f1)
     MEM_A=$(grep MemAvailable /proc/meminfo | awk '{print $2}'); MEM_T=$(grep MemTotal /proc/meminfo | awk '{print $2}')
     RAM=$(( 100 - (MEM_A * 100 / MEM_T) ))
+    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | cut -d. -f1)
 
-    # REAL NETWORK CHECK (Fixes the Red Dot)
     if ping -q -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then 
         NET_STAT="${G}● CONNECTED${NC}"
     else 
@@ -27,16 +26,17 @@ while true; do
     fi
 
     clear
-    # TOP STATUS BAR (White Powerline)
-    echo -e " ${W}─${NC} ${W}${NC}${B}  $HNAME ${NC}${W}${NC}  ${W}${NC}${B}  $UPTIME ${NC}${W}${NC}  ${W}${NC}${B}  $DISK ${NC}${W}${NC}  ${W}${NC}${B}  $CPU% RAM $RAM%${NC}${W}${NC}"
+    # TOP STATUS BAR
+    echo -e " ${W}─${NC} ${C}${NC}${B}  $HNAME ${NC}${C}${NC}  ${P}${NC}${B}  $UPTIME ${NC}${P}${NC}  ${G}${NC}${B}  $DISK ${NC}${G}${NC}  ${W}${NC}${B}  $CPU% RAM $RAM%${NC}${W}${NC}"
 
-    # LOGO: LIEKGMC
+    # MAIN LOGO: LIEKGMC (Gradient Style)
     echo -e "${C}██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ "
     echo -e "${P}██║     ██║██╔════╝██║ ██╔╝██╔════╝ ████╗ ████║██╔════╝ "
     echo -e "${P}██║     ██║█████╗  █████╔╝ ██║  ███╗██╔████╔██║██║      "
     echo -e "${Y}██║     ██║██╔══╝  ██╔═██╗ ██║   ██║██║╚██╔╝██║██║      "
     echo -e "${C}███████╗██║███████╗██║  ██╗╚██████╔╝██║ ╚═╝ ██║╚██████╗ "
-    echo -e "${C}╚══════╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝"
+    echo -e " ${C}╚══════╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ "
+    
     echo -e "                  ${W}NOBITA EDITION — OBSIDIAN NEXT GEN${NC}"
     echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}\n"
 
@@ -44,16 +44,16 @@ while true; do
     echo -e " ${W}◉ SYSTEM STATUS${NC}"
     echo -e "   CPU Usage:   ${C}$CPU%${NC}     RAM Usage:   ${P}$RAM%${NC}     Network: $NET_STAT\n"
 
-    # DEPLOYMENT & SERVICES (Using proper tree characters)
+    # DEPLOYMENT & SERVICES
     echo -e " ${C} DEPLOYMENT & SERVICES${NC}"
-    echo -e "   ${B}│${NC} [1] VPS           ${B}│${NC} [5] Themes"
-    echo -e "   ${B}│${NC} [2] Panel         ${B}│${NC} [6] System"
-    echo -e "   ${B}│${NC} [3] Wings         ${B}└─${NC} [7] Container"
+    echo -e "   ${B}├─${NC} [1] VPS           ${B}├─${NC} [5] Themes"
+    echo -e "   ${B}├─${NC} [2] Panel         ${B}├─${NC} [6] System"
+    echo -e "   ${B}├─${NC} [3] Wings         ${B}└─${NC} [7] Container"
     echo -e "   ${B}└─${NC} [8] ${G}New Module${NC}\n"
 
     # MAINTENANCE & TOOLS
     echo -e " ${P} MAINTENANCE & TOOLS${NC}"
-    echo -e "   ${B}│${NC} [4] Toolbox              ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
+    echo -e "   ${B}├─${NC} [4] Toolbox           ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
     echo -e "   ${B}└─${NC} [9] Extras\n"
 
     echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}"
@@ -62,6 +62,9 @@ while true; do
 
     case $opt in
         0) echo -e "\n${R}Shutting down...${NC}"; exit 0 ;;
-        *) echo -e "\n${G}Selected Option $opt...${NC}"; sleep 1 ;;
+        1) echo -e "\n${G}Selected: VPS Deployment${NC}"; sleep 1 ;;
+        2) echo -e "\n${G}Selected: Panel Config${NC}"; sleep 1 ;;
+        4) echo -e "\n${P}Launching Toolbox...${NC}"; sleep 1 ;;
+        *) echo -e "\n${W}Running module $opt...${NC}"; sleep 1 ;;
     esac
 done
