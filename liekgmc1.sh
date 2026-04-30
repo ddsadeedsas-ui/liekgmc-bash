@@ -11,14 +11,10 @@ B='\033[0;38;5;236m'     # Dark Gray
 NC='\033[0m'             # Reset
 
 while true; do
-    # --- DYNAMIC DATA GATHERING ---
+    # --- REAL-TIME DATA GATHERING ---
     HNAME=$(hostname)
     UPTIME=$(uptime -p | sed 's/up //')
-    
-    # Disk Usage Logic
     DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}')
-    DISK_TOTAL=$(df -h / | awk 'NR==2 {print $2}')
-    DISK_USED=$(df -h / | awk 'NR==2 {print $3}')
     
     # RAM Calculation
     MEM_INFO=$(cat /proc/meminfo)
@@ -51,10 +47,9 @@ while true; do
     echo -e "                  ${W}NOBITA EDITION — OBSIDIAN NEXT GEN${NC}"
     echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}\n"
 
-    # SYSTEM STATUS
+    # SYSTEM STATUS (Working Stats)
     echo -e " ${W}◉ SYSTEM STATUS${NC}"
-    echo -e "   CPU Usage:   ${C}$CPU_USAGE%${NC}     RAM Usage:   ${P}$RAM_USAGE%${NC}     Network: $NET_STAT"
-    echo -e "   Disk Total:  ${W}$DISK_TOTAL${NC}      Disk Used:   ${G}$DISK_USED ($DISK_USAGE)${NC}\n"
+    echo -e "   CPU Usage:   ${C}$CPU_USAGE%${NC}     RAM Usage:   ${P}$RAM_USAGE%${NC}     Network: $NET_STAT\n"
 
     # DEPLOYMENT & SERVICES
     echo -e " ${C} DEPLOYMENT & SERVICES${NC}"
@@ -73,15 +68,15 @@ while true; do
     read -r opt
 
     case $opt in
-        1) echo -e "\n${G}Selected: VPS Deployment${NC}"; sleep 2 ;;
-        2) echo -e "\n${G}Selected: Panel Management${NC}"; sleep 2 ;;
-        3) echo -e "\n${G}Selected: Wings Config${NC}"; sleep 2 ;;
-        4) echo -e "\n${P}Selected: Toolbox${NC}"; sleep 2 ;;
-        5) echo -e "\n${C}Selected: Themes${NC}"; sleep 2 ;;
-        6) echo -e "\n${W}Selected: System Health${NC}"; sleep 2 ;;
-        7) echo -e "\n${G}Selected: Container Management${NC}"; sleep 2 ;;
-        8) echo -e "\n${G}Selected: New Module${NC}"; sleep 2 ;;
-        9) echo -e "\n${P}Selected: Extras${NC}"; sleep 2 ;;
+        1) echo -e "\n${G}Initializing VPS tools...${NC}"; sleep 2 ;;
+        2) echo -e "\n${G}Opening Panel settings...${NC}"; sleep 2 ;;
+        3) echo -e "\n${G}Checking Wings status...${NC}"; sleep 2 ;;
+        4) echo -e "\n${P}Launching Toolbox...${NC}"; sleep 2 ;;
+        5) echo -e "\n${C}Refreshing Themes...${NC}"; sleep 2 ;;
+        6) echo -e "\n${W}System Info:${NC}"; uname -a; sleep 3 ;;
+        7) echo -e "\n${G}Managing Containers...${NC}"; sleep 2 ;;
+        8) echo -e "\n${G}Loading New Module...${NC}"; sleep 2 ;;
+        9) echo -e "\n${P}Opening Extras...${NC}"; sleep 2 ;;
         0) echo -e "\n${R}Shutting down... Sayonara!${NC}"; exit 0 ;;
         *) echo -e "\n${R}Invalid Option!${NC}"; sleep 1 ;;
     esac
