@@ -14,7 +14,11 @@ while true; do
     # --- DYNAMIC DATA GATHERING ---
     HNAME=$(hostname)
     UPTIME=$(uptime -p | sed 's/up //')
+    
+    # Disk Usage Logic
     DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}')
+    DISK_TOTAL=$(df -h / | awk 'NR==2 {print $2}')
+    DISK_USED=$(df -h / | awk 'NR==2 {print $3}')
     
     # RAM Calculation
     MEM_INFO=$(cat /proc/meminfo)
@@ -33,8 +37,8 @@ while true; do
     fi
 
     clear
-    # TOP STATUS BAR (Pure White Theme)
-    echo -e " ${W}${NC}${B}  $HNAME ${NC}${W}${NC}  ${W}${NC}${B}  $UPTIME ${NC}${W}${NC}  ${W}${NC}${B}  $DISK_USAGE ${NC}${W}${NC}  ${W}${NC}${B}  $CPU_USAGE% RAM $RAM_USAGE%${NC}${W}${NC}"
+    # TOP STATUS BAR (Dynamic Powerline)
+    echo -e " ${C}${NC}${B}  $HNAME ${NC}${C}${NC}  ${P}${NC}${B}  $UPTIME ${NC}${P}${NC}  ${G}${NC}${B}  $DISK_USAGE ${NC}${G}${NC}  ${W}${NC}${B}  $CPU_USAGE% RAM $RAM_USAGE%${NC}${W}${NC}"
 
     # MAIN LOGO (GODING HUB - Gradient)
     echo -e "${C}██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ "
@@ -49,7 +53,8 @@ while true; do
 
     # SYSTEM STATUS
     echo -e " ${W}◉ SYSTEM STATUS${NC}"
-    echo -e "   CPU Usage:   ${C}$CPU_USAGE%${NC}     RAM Usage:   ${P}$RAM_USAGE%${NC}     Network: $NET_STAT\n"
+    echo -e "   CPU Usage:   ${C}$CPU_USAGE%${NC}     RAM Usage:   ${P}$RAM_USAGE%${NC}     Network: $NET_STAT"
+    echo -e "   Disk Total:  ${W}$DISK_TOTAL${NC}      Disk Used:   ${G}$DISK_USED ($DISK_USAGE)${NC}\n"
 
     # DEPLOYMENT & SERVICES
     echo -e " ${C} DEPLOYMENT & SERVICES${NC}"
