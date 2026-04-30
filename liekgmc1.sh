@@ -14,26 +14,23 @@ while true; do
     # --- DATA GATHERING ---
     HNAME=$(hostname)
     UPTIME=$(uptime -p | sed 's/up //')
-    DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}')
-    
-    # RAM and CPU
-    MEM_AVAIL=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
-    MEM_TOTAL=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-    RAM_USAGE=$(( 100 - (MEM_AVAIL * 100 / MEM_TOTAL) ))
-    CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | cut -d. -f1)
+    DISK=$(df -h / | awk 'NR==2 {print $5}')
+    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | cut -d. -f1)
+    MEM_A=$(grep MemAvailable /proc/meminfo | awk '{print $2}'); MEM_T=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    RAM=$(( 100 - (MEM_A * 100 / MEM_T) ))
 
-    # Network Connectivity Check
-    if ping -c 1 8.8.8.8 &>/dev/null; then
+    # REAL NETWORK CHECK (Fixes the Red Dot)
+    if ping -q -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then 
         NET_STAT="${G}● CONNECTED${NC}"
-    else
+    else 
         NET_STAT="${R}● DISCONNECTED${NC}"
     fi
 
     clear
-    # TOP STATUS BAR (Powerline Style)
-    echo -e " ${W}─${NC} ${W}${NC}${B}  $HNAME ${NC}${W}${NC}  ${P}${NC}${B}  $UPTIME ${NC}${P}${NC}  ${G}${NC}${B}  $DISK_USAGE ${NC}${G}${NC}  ${C}${NC}${B}  $CPU_USAGE% RAM $RAM_USAGE%${NC}${C}${NC}"
+    # TOP STATUS BAR (White Powerline)
+    echo -e " ${W}─${NC} ${W}${NC}${B}  $HNAME ${NC}${W}${NC}  ${W}${NC}${B}  $UPTIME ${NC}${W}${NC}  ${W}${NC}${B}  $DISK ${NC}${W}${NC}  ${W}${NC}${B}  $CPU% RAM $RAM%${NC}${W}${NC}"
 
-    # MAIN LOGO: LIEKGMC (Multicolor Gradient)
+    # LOGO: LIEKGMC
     echo -e "${C}██╗     ██╗███████╗██╗  ██╗ ██████╗ ███╗   ███╗ ██████╗ "
     echo -e "${P}██║     ██║██╔════╝██║ ██╔╝██╔════╝ ████╗ ████║██╔════╝ "
     echo -e "${P}██║     ██║█████╗  █████╔╝ ██║  ███╗██╔████╔██║██║      "
@@ -45,34 +42,26 @@ while true; do
 
     # SYSTEM STATUS
     echo -e " ${W}◉ SYSTEM STATUS${NC}"
-    echo -e "   CPU Usage:   ${C}${CPU_USAGE}%${NC}     RAM Usage:   ${P}${RAM_USAGE}%${NC}     Network: $NET_STAT\n"
+    echo -e "   CPU Usage:   ${C}$CPU%${NC}     RAM Usage:   ${P}$RAM%${NC}     Network: $NET_STAT\n"
 
-    # DEPLOYMENT & SERVICES
+    # DEPLOYMENT & SERVICES (Using proper tree characters)
     echo -e " ${C} DEPLOYMENT & SERVICES${NC}"
-    echo -e "   ${B}├─${NC} [1] VPS           ${B}├─${NC} [5] Themes"
-    echo -e "   ${B}├─${NC} [2] Panel         ${B}├─${NC} [6] System"
-    echo -e "   ${B}├─${NC} [3] Wings         ${B}└─${NC} [7] Container"
+    echo -e "   ${B}│${NC} [1] VPS           ${B}│${NC} [5] Themes"
+    echo -e "   ${B}│${NC} [2] Panel         ${B}│${NC} [6] System"
+    echo -e "   ${B}│${NC} [3] Wings         ${B}└─${NC} [7] Container"
     echo -e "   ${B}└─${NC} [8] ${G}New Module${NC}\n"
 
     # MAINTENANCE & TOOLS
     echo -e " ${P} MAINTENANCE & TOOLS${NC}"
-    echo -e "   ${B}├─${NC} [4] Toolbox              ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
+    echo -e "   ${B}│${NC} [4] Toolbox              ${B}└─${NC} ${R} [0] SHUTDOWN SYSTEM ${NC}"
     echo -e "   ${B}└─${NC} [9] Extras\n"
 
+    echo -e " ${B}────────────────────────────────────────────────────────────────────────────────${NC}"
     echo -ne " ${C}➜ Enter Option (0-9): ${NC}"
     read -r opt
 
     case $opt in
         0) echo -e "\n${R}Shutting down...${NC}"; exit 0 ;;
-        1) echo -e "\n${G}Selected VPS Deployment...${NC}"; sleep 1 ;;
-        2) echo -e "\n${G}Selected Panel Management...${NC}"; sleep 1 ;;
-        3) echo -e "\n${G}Selected Wings Config...${NC}"; sleep 1 ;;
-        4) echo -e "\n${P}Launching Toolbox...${NC}"; sleep 1 ;;
-        5) echo -e "\n${C}Loading Themes...${NC}"; sleep 1 ;;
-        6) echo -e "\n${W}System Health Check...${NC}"; sleep 1 ;;
-        7) echo -e "\n${G}Managing Containers...${NC}"; sleep 1 ;;
-        8) echo -e "\n${G}Adding New Module...${NC}"; sleep 1 ;;
-        9) echo -e "\n${P}Opening Extras Menu...${NC}"; sleep 1 ;;
-        *) echo -e "\n${R}Invalid Option!${NC}"; sleep 1 ;;
+        *) echo -e "\n${G}Selected Option $opt...${NC}"; sleep 1 ;;
     esac
 done
